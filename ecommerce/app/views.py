@@ -5,6 +5,9 @@ from rest_framework import status
 from .models import Product, Order, WishList, Cart, Category, Comment, OrderItem, CartItem
 from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, CommentSerializer, OrderItemSerializer, CardSerializer, CartItemSerializer
 # from .permissions import IsManager, IsOwnerOrManager
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Product Views
@@ -84,8 +87,11 @@ def product_delete(request, pk):
 
 
 #catigory
+
+
+# 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
+@csrf_exempt
 def catigory_create(request):
     if request.method == 'POST':
         serializer = CategorySerializer(data=request.data)
@@ -112,6 +118,7 @@ def catigory_delete(request, pk):
 
 #order
 @api_view(['POST'])
+@csrf_exempt
 def order_create(request):
     if request.method == 'POST':
         serializer = OrderSerializer(data=request.data)
@@ -122,8 +129,8 @@ def order_create(request):
 
 @api_view(['GET'])
 def order_list(request):
-    products = Order.objects.all()
-    serializer = OrderSerializer(products, many=True)
+    order = Order.objects.all()
+    serializer = OrderSerializer(order, many=True)
     return Response(serializer.data)
 
 @api_view(['PUT'])

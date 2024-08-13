@@ -48,14 +48,6 @@ urlpatterns = [
     path('cardItem/<int:pk>/update/', views.cardItem_update, name='cardItem-update'),
     path('cardItem/<int:pk>/delete/', views.cardItem_delete, name='cardItem-delete'),
 
-    # # Order URLs
-    # path('orders/', views.order_list, name='order-list'),
-    # path('orders/create/', views.order_create, name='order-create'),
-    # path('orders/<int:pk>/', views.order_detail, name='order-detail'),
-
-    # # Wishlist URLs
-    # path('wishlist/', views.wishlist, name='wishlist'),
-    # path('wishlist/<int:pk>/remove/', views.wishlist_remove, name='wishlist-remove'),
 
 
 ]

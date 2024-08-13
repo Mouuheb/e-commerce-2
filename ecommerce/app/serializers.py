@@ -29,11 +29,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['id', 'order', 'product', 'quantity']
 
 class OrderSerializer(serializers.ModelSerializer):
-    orderItem = OrderItemSerializer(many=True)
+    # orderItem = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'orderItem', 'address', 'total_price', 'tel', 'email']
+        fields = ['id', 'user', 'address', 'total_price', 'tel', 'email', 'date']
 
 class WishListSerializer(serializers.ModelSerializer):
     class Meta:
