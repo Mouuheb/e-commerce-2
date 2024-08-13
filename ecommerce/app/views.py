@@ -6,24 +6,8 @@ from .models import Product, Order, WishList, Cart
 from .serializers import ProductSerializer, OrderSerializer
 # from .permissions import IsManager, IsOwnerOrManager
 
+
 # Product Views
-
-@api_view(['GET'])
-def product_list(request):
-    products = Product.objects.all()
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def product_detail(request, pk):
-    try:
-        product = Product.objects.get(pk=pk)
-    except Product.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = ProductSerializer(product)
-    return Response(serializer.data)
-
 @api_view(['POST'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def product_create(request):
@@ -33,6 +17,30 @@ def product_create(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def product_list(request):
+    products = Product.objects.all()
+
+
+    # Apply filters
+    min_price = request.query_params.get('min_price')
+    max_price = request.query_params.get('max_price')
+    in_stock = request.query_params.get('in_stock')
+    category = request.query_params.get('max_price')
+
+    if min_price is not None:
+        products = products.filter(price__gte=min_price)
+    if max_price is not None:
+        products = products.filter(price__lte=max_price)
+    if in_stock is not None:
+        in_stock = in_stock.lower() in ['true', '1', 'yes']
+        products = products.filter(in_stock=in_stock)
+
+
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['PUT'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
@@ -48,6 +56,16 @@ def product_update(request, pk):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def product_detail(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = ProductSerializer(product)
+    return Response(serializer.data)
 
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])

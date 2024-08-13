@@ -52,7 +52,7 @@ class Comment(models.Model):
 # Order Model
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through='OrderItem')
+    # products = models.ManyToManyField(Product, through='OrderItem')
     address = models.CharField(max_length=255)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     tel = models.CharField(max_length=15)
@@ -81,10 +81,13 @@ class WishList(models.Model):
 # Cart Model
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through='CartItem')
+    # products = models.ManyToManyField(Product, through='CartItem')
 
     def __str__(self):
         return f'Cart of {self.user.username}'
+    
+    class Meta:
+        unique_together = ['user']
 
 # CartItem Model to link Product and Cart
 class CartItem(models.Model):
