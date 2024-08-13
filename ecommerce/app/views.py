@@ -343,7 +343,7 @@ def card_delete(request, pk):
 # cardItem Views
 @api_view(['POST'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
-def cardItem(request):
+def cardItem_create(request):
     if request.method == 'POST':
         serializer = CartItemSerializer(data=request.data)
         if serializer.is_valid():

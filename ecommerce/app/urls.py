@@ -9,16 +9,53 @@ urlpatterns = [
     path('products/<int:pk>/update/', views.product_update, name='product-update'),
     path('products/<int:pk>/delete/', views.product_delete, name='product-delete'),
 
+    # Catigory URLs
+    path('catigory/create/', views.catigory_create, name='catigory-create'),
+    path('catigory/<int:pk>/delete/', views.catigory_delete, name='catigory-delete'),
+
     # Order URLs
-    path('orders/', views.order_list, name='order-list'),
-    path('orders/create/', views.order_create, name='order-create'),
-    path('orders/<int:pk>/', views.order_detail, name='order-detail'),
+    path('order/', views.order_list, name='order-list'),
+    path('order/<int:pk>/', views.order_detail, name='order-detail'),
+    path('order/create/', views.order_create, name='order-create'),
+    path('order/<int:pk>/update/', views.order_update, name='order-update'),
+    path('order/<int:pk>/delete/', views.order_delete, name='order-delete'),
 
-    # Wishlist URLs
-    path('wishlist/', views.wishlist, name='wishlist'),
-    path('wishlist/<int:pk>/remove/', views.wishlist_remove, name='wishlist-remove'),
+    # comment URLs
+    path('comment/', views.comment_list, name='comment-list'),
+    path('comment/<int:pk>/', views.comment_detail, name='comment-detail'),
+    path('comment/create/', views.comment_create, name='comment-create'),
+    path('comment/<int:pk>/update/', views.comment_update, name='comment-update'),
+    path('comment/<int:pk>/delete/', views.comment_delete, name='comment-delete'),
 
-    # Cart URLs
-    path('cart/', views.cart, name='cart'),
-    path('cart/<int:pk>/remove/', views.cart_remove, name='cart-remove'),
+    # orderItem URLs
+    path('orderItem/', views.orderItem_list, name='orderItem-list'),
+    path('orderItem/<int:pk>/', views.orderItem_detail, name='orderItem-detail'),
+    path('orderItem/create/', views.orderItem_create, name='orderItem-create'),
+    path('orderItem/<int:pk>/update/', views.orderItem_update, name='orderItem-update'),
+    path('orderItem/<int:pk>/delete/', views.orderItem_delete, name='orderItem-delete'),
+
+    # card URLs
+    path('card/', views.card_list, name='card-list'),
+    path('card/<int:pk>/', views.card_detail, name='card-detail'),
+    path('card/create/', views.card_create, name='card-create'),
+    path('card/<int:pk>/update/', views.card_update, name='card-update'),
+    path('card/<int:pk>/delete/', views.card_delete, name='card-delete'),
+
+    # cardItem URLs
+    path('cardItem/', views.cardItem_list, name='cardItem-list'),
+    path('cardItem/<int:pk>/', views.cardItem_detail, name='cardItem-detail'),
+    path('cardItem/create/', views.cardItem_create, name='cardItem-create'),
+    path('cardItem/<int:pk>/update/', views.cardItem_update, name='cardItem-update'),
+    path('cardItem/<int:pk>/delete/', views.cardItem_delete, name='cardItem-delete'),
+
+    # # Order URLs
+    # path('orders/', views.order_list, name='order-list'),
+    # path('orders/create/', views.order_create, name='order-create'),
+    # path('orders/<int:pk>/', views.order_detail, name='order-detail'),
+
+    # # Wishlist URLs
+    # path('wishlist/', views.wishlist, name='wishlist'),
+    # path('wishlist/<int:pk>/remove/', views.wishlist_remove, name='wishlist-remove'),
+
+
 ]
