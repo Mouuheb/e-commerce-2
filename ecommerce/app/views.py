@@ -242,7 +242,7 @@ def orderItem_create(request):
     
 @api_view(['GET'])
 def orderItem_list(request):
-    orderItem = Product.objects.all()
+    orderItem = OrderItem.objects.all()
     serializer = OrderItemSerializer(orderItem, many=True)
     return Response(serializer.data)
 
