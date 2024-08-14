@@ -16,6 +16,8 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    sold = models.PositiveIntegerField()
+    
     #rate = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     stock_status = models.BooleanField(default=True)  # True for in stock, False for out of stock
 
