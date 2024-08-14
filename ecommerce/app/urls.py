@@ -48,6 +48,13 @@ urlpatterns = [
     path('cardItem/<int:pk>/update/', views.cardItem_update, name='cardItem-update'),
     path('cardItem/<int:pk>/delete/', views.cardItem_delete, name='cardItem-delete'),
 
+    # WishItem URLs
+    path('wishItem/', views.wishItem_list, name='wishItem-list'),
+    path('wishItem/<int:pk>/', views.wishItem_detail, name='wishItem-detail'),
+    path('wishItem/create/', views.wishItem_create, name='wishItem-create'),
+    path('wishItem/<int:pk>/update/', views.wishItem_update, name='wishItem-update'),
+    path('wishItem/<int:pk>/delete/', views.wishItem_delete, name='wishItem-delete'),
+
 
 
 ]

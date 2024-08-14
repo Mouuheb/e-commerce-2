@@ -2,8 +2,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Product, Order, WishList, Cart, Category, Comment, OrderItem, CartItem
-from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, CommentSerializer, OrderItemSerializer, CardSerializer, CartItemSerializer
+from .models import Product, Order, WishList, Cart, Category, Comment, OrderItem, CartItem, WishItem
+from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, CommentSerializer, OrderItemSerializer, CardSerializer, CartItemSerializer, WishItemSerializer
 # from .permissions import IsManager, IsOwnerOrManager
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -400,6 +400,63 @@ def cardItem_delete(request, pk):
     if request.method == 'DELETE':
         cardItem.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+# WhishItem Views
+@api_view(['POST'])
+# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
+def wishItem_create(request):
+    if request.method == 'POST':
+        serializer = WishItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def wishItem_list(request):
+    wishItem = WishItem.objects.all()
+    serializer = CartItemSerializer(wishItem, many=True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
+def wishItem_update(request, pk):
+    try:
+        wishItem = WishItem.objects.get(pk=pk)
+    except WishItem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = WishItemSerializer(WishItem, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def wishItem_detail(request, pk):
+    try:
+        wishItem = WishItem.objects.get(pk=pk)
+    except WishItem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = WishItemSerializer(wishItem)
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
+def wishItem_delete(request, pk):
+    try:
+        wishItem = WishItem.objects.get(pk=pk)
+    except WishItem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        wishItem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 
