@@ -13,7 +13,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'product','user','comment','rating']
 
 class ProductSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
 
     class Meta:

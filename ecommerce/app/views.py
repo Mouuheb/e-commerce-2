@@ -373,7 +373,7 @@ def cardItem_update(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
-        serializer = CartItem(cardItem, data=request.data)
+        serializer = CartItemSerializer(cardItem, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
