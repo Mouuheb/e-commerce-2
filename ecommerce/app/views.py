@@ -31,6 +31,10 @@ def product_list(request):
     max_price = request.query_params.get('max_price')
     in_stock = request.query_params.get('in_stock')
     category = request.query_params.get('category')
+    is_best = request.query_params.get('is_best')
+
+    fea = request.query_params.get('featured')
+    lat = request.query_params.get('latest')
 
     if category is not None:
         products = products.filter(price__gte=category)
@@ -41,6 +45,19 @@ def product_list(request):
     if in_stock is not None:
         in_stock = in_stock.lower() in ['true', '1', 'yes']
         products = products.filter(stock_status=in_stock)
+    if is_best is not None:
+        
+        if is_best == 'true':
+            products = products.filter(best=True)
+
+    if lat is not None:
+        if lat == 'true':
+             products = products.order_by('-id')[:4]
+    
+    if fea is not None:
+        # products = []
+        if fea == 'true':
+            products = products.filter(featured=True)
 
 
     serializer = ProductSerializer(products, many=True)

@@ -18,7 +18,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'image', 'category', 'quantity', 'price', 'sold', 'average_rating', 'comments', 'available_colors', 'available_sizes', 'stock_status']
+        fields = ['id', 'name', 'description', 'image', 'category', 'quantity', 'price', 'sold', 'average_rating', 'comments', 'available_colors', 'available_sizes', 'stock_status', 'featured', 'best']
 
     def get_average_rating(self, obj):
         return obj.average_rating()
