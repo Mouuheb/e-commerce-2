@@ -368,12 +368,55 @@ def card_delete(request, pk):
 @api_view(['POST'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def cardItem_create(request):
-    if request.method == 'POST':
-        serializer = CartItemSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        # Extracting product and cart from the request data
+        product_id = request.data.get('product')
+        cart_id = request.data.get('cart')
+        quantity = request.data.get('quantity')
+
+        cart_item = CartItem.objects.filter(product=product_id, cart=cart_id).first()
+
+        if cart_item:
+            # If the item exists, update the quantity
+            cart_item.quantity += int(quantity)
+            cart_item.save()
+            serializer = CartItemSerializer(cart_item)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # If the item doesn't exist, create a new one
+            serializer = CartItemSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Product.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Cart.DoesNotExist:
+        return Response({"error": "Cart not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# def cardItem_create(request):
+#     if request.method == 'POST':
+#         try:
+#             cardItem = CartItem.objects.get(product=request.product,cart=request.cart)
+#             if cardItem != None and cardItem !=[]:
+#                 pk=cardItem.id
+#                 request={
+#                     "id":pk,
+#                     "card":cardItem.cart,
+#                     "product":cardItem.product,
+#                     "quantity":(cardItem.quantity+request.quantity)
+#                 }
+#                 cardItem_update(request, pk)
+#                 pass
+#         except CartItem.DoesNotExist:
+#             pass
+#         serializer = CartItemSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
 def cardItem_list(request):
