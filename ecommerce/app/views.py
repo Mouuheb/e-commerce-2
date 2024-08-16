@@ -21,47 +21,155 @@ def product_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+# @api_view(['GET'])
+# def product_list(request):
+#     products = Product.objects.all()
+
+
+#     # Apply filters
+#     min_price = request.query_params.get('min')
+#     max_price = request.query_params.get('max')
+#     in_stock = request.query_params.get('in_stock')
+#     category = request.query_params.get('category')
+#     is_best = request.query_params.get('is_best')
+
+#     fea = request.query_params.get('featured')
+#     lat = request.query_params.get('latest')
+
+#     if category is not None:
+#         products = products.filter(category==category)
+#     if min_price is not None:
+#         products = products.filter(price__gte=min_price)
+#     if max_price is not None:
+#         products = products.filter(price__lte=max_price)
+#     if in_stock is not None:
+#         in_stock = in_stock.lower() in ['true', '1', 'yes']
+#         products = products.filter(stock_status=in_stock)
+#     if is_best is not None:
+        
+#         if is_best == 'true':
+#             products = products.filter(best=True)
+
+#     if lat is not None:
+#         if lat == 'true':
+#              products = products.order_by('-id')[:4]
+    
+#     if fea is not None:
+#         # products = []
+#         if fea == 'true':
+#             products = products.filter(featured=True)
+
+
+#     serializer = ProductSerializer(products, many=True)
+#     return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @api_view(['GET'])
 def product_list(request):
     products = Product.objects.all()
 
-
     # Apply filters
-    min_price = request.query_params.get('min_price')
-    max_price = request.query_params.get('max_price')
+    min_price = request.query_params.get('min')
+    max_price = request.query_params.get('max')
     in_stock = request.query_params.get('in_stock')
     category = request.query_params.get('category')
     is_best = request.query_params.get('is_best')
-
     fea = request.query_params.get('featured')
     lat = request.query_params.get('latest')
+    color = request.query_params.get('color')
+    size = request.query_params.get('size')
+
+
+    if color is not None:
+        products = products.filter(available_colors__icontains= color)
+
+    if size is not None:
+        products = products.filter(available_sizes__icontains= size)
 
     if category is not None:
-        products = products.filter(price__gte=category)
+        products = products.filter(category=category)  # Corrected: '=' instead of '=='
+
     if min_price is not None:
         products = products.filter(price__gte=min_price)
+
     if max_price is not None:
         products = products.filter(price__lte=max_price)
+
     if in_stock is not None:
         in_stock = in_stock.lower() in ['true', '1', 'yes']
         products = products.filter(stock_status=in_stock)
+
     if is_best is not None:
-        
         if is_best == 'true':
             products = products.filter(best=True)
 
     if lat is not None:
         if lat == 'true':
-             products = products.order_by('-id')[:4]
-    
+            products = products.order_by('-id')[:4]
+
     if fea is not None:
-        # products = []
         if fea == 'true':
             products = products.filter(featured=True)
 
-
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @api_view(['PUT'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
