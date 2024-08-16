@@ -467,6 +467,15 @@ def cardItem_delete(request, pk):
 @api_view(['POST'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def wishItem_create(request):
+
+    product_id = request.data.get('product')
+    user_id = request.data.get('user')
+
+
+    cart_item = WishItem.objects.filter(product=product_id, user=user_id).first()
+    if cart_item:
+        return Response('alredy exist',status=status.HTTP_201_CREATED)
+
     
     if request.method == 'POST':
         serializer = WishItemSerializer(data=request.data)
