@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Product, Order, WishList, Cart, Category, Comment, OrderItem, CartItem, WishItem
-from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, CommentSerializer, OrderItemSerializer, CardSerializer, CartItemSerializer, WishItemSerializer
+from .serializers import ProductSerializer, OrderSerializer, CategorySerializer, CommentSerializer, OrderItemSerializer, CardSerializer, CartItemSerializer, WishItemSerializer, CategorySerializer
 # from .permissions import IsManager, IsOwnerOrManager
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -105,6 +105,11 @@ def product_delete(request, pk):
 
 #catigory
 
+@api_view(['GET'])
+def catigory_list(request):
+    catigory = Category.objects.all()
+    serializer = CategorySerializer(catigory, many=True)
+    return Response(serializer.data)
 
 # 
 @api_view(['POST'])

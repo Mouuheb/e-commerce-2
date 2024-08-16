@@ -12,6 +12,7 @@ urlpatterns = [
     # Catigory URLs
     path('catigory/create/', views.catigory_create, name='catigory-create'),
     path('catigory/<int:pk>/delete/', views.catigory_delete, name='catigory-delete'),
+    path('catigory/', views.catigory_list, name='catigory-list'),
 
     # Order URLs
     path('order/', views.order_list, name='order-list'),
