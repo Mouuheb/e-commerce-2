@@ -467,6 +467,7 @@ def cardItem_delete(request, pk):
 @api_view(['POST'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def wishItem_create(request):
+    
     if request.method == 'POST':
         serializer = WishItemSerializer(data=request.data)
         if serializer.is_valid():
@@ -477,7 +478,7 @@ def wishItem_create(request):
 @api_view(['GET'])
 def wishItem_list(request):
     wishItem = WishItem.objects.all()
-    serializer = CartItemSerializer(wishItem, many=True)
+    serializer = WishItemSerializer(wishItem, many=True)
     return Response(serializer.data)
 
 @api_view(['PUT'])
