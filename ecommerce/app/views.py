@@ -534,6 +534,17 @@ def cardItem_create(request):
 @api_view(['GET'])
 def cardItem_list(request):
     cardItem = CartItem.objects.all()
+
+
+    user = request.query_params.get('user')
+
+
+    if user is not None:
+        # cardItem=cardItem
+        cardItem = cardItem.filter(cart=user )
+
+
+
     serializer = CartItemSerializer(cardItem, many=True)
     return Response(serializer.data)
 

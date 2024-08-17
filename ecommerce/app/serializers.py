@@ -43,7 +43,7 @@ class WishListSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['id', 'cart', 'product', 'quantity']
+        fields = ['id', 'cart', 'product', 'quantity', 'available_colors', 'available_sizes']
 
 class CardSerializer(serializers.ModelSerializer):
 
