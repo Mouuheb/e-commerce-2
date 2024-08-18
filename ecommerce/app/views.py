@@ -10,6 +10,122 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
+import stripe
+
+
+
+@api_view(['GET'])
+def stripe_config(request):
+    if request.method == 'GET':
+        stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
+        return Response(stripe_config)
+
+@api_view(['GET'])
+def create_checkout_session(request):
+    domain_url = 'http://localhost:8000/'
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    try:
+        total_amount = 25500  # Get the total amount from the request or set it as needed
+
+        # Create new Checkout Session for the total amount
+        checkout_session = stripe.checkout.Session.create(
+            # success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
+            # cancel_url=domain_url + 'cancelled/',
+            success_url='http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://localhost:5173/cancelled/',
+            payment_method_types=['card'],
+            mode='payment',
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': 'Total Order Payment',
+                        },
+                        'unit_amount': total_amount,  # Total amount in cents
+                    },
+                    'quantity': 1,
+                },
+            ]
+        )
+        return Response({'sessionId': checkout_session['id']}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+
+    try:
+        # Verify the webhook signature and construct the event
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+
+        # Handle the event
+        if event['type'] == 'payment_intent.succeeded':
+            payment_intent = event['data']['object']  # Contains a Stripe payment intent
+            # Fulfill the purchase
+            print(f"PaymentIntent was successful for {payment_intent['id']}")
+
+        # Other event types can be handled here
+
+        return Response(status=200)
+
+    except ValueError as e:
+        # Invalid payload
+        return Response({'error': 'Invalid payload'}, status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return Response({'error': 'Invalid signature'}, status=400)
+    except Exception as e:
+        # General error handler
+        return Response({'error': str(e)}, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Product Views
 @api_view(['POST'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])

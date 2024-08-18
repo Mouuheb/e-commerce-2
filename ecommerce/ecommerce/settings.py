@@ -150,3 +150,14 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+STRIPE_PUBLISHABLE_KEY = 'pk_live_51PmvVMFjSMpvoV6KKnsfv2IfPABzxUcWrHX6P8t5W4E3J0TqFsBu2lbROBrvKBoMLBKB0brPo3Y3He141CdXvoUT00lwHsO1a2'
+STRIPE_SECRET_KEY = 'sk_test_51PmvVMFjSMpvoV6Kx5kYEapfE6ASpqyFDUJ2kmApH1huzpwW564iysQF3YsKJKRsbyH7tdThg0C5uTwjZHsIspEg00IgvDzjS5'

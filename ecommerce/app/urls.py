@@ -57,5 +57,12 @@ urlpatterns = [
     path('wishItem/<int:pk>/delete/', views.wishItem_delete, name='wishItem-delete'),
 
 
+    path('config/', views.stripe_config),  # new
+    path('create-checkout-session/', views.create_checkout_session), # new
+    #path('success/', views.SuccessView.as_view()), # new
+    #path('cancelled/', views.CancelledView.as_view()), # new
+    path('webhook/', views.stripe_webhook), # new
+
+
 
 ]
