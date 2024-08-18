@@ -31,7 +31,16 @@ def create_checkout_session(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     try:
-        total_amount = 25500  # Get the total amount from the request or set it as needed
+        order = Order.objects.all().first()
+        total_amoun = order.total_price
+        total_amount=int(total_amoun)
+               
+
+
+
+
+
+        #total_amount = 25500  # Get the total amount from the request or set it as needed
 
         # Create new Checkout Session for the total amount
         checkout_session = stripe.checkout.Session.create(
