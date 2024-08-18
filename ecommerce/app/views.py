@@ -37,8 +37,8 @@ def create_checkout_session(request):
         checkout_session = stripe.checkout.Session.create(
             # success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
             # cancel_url=domain_url + 'cancelled/',
-            success_url='http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url='http://localhost:5173/cancelled/',
+            success_url='http://localhost:5173/sec?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://localhost:5173/fail',
             payment_method_types=['card'],
             mode='payment',
             line_items=[
