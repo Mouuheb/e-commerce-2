@@ -31,9 +31,9 @@ def create_checkout_session(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     try:
-        order = Order.objects.all().first()
+        order = Order.objects.all().last()
         total_amoun = order.total_price
-        total_amount=int(total_amoun)
+        total_amount=int(total_amoun)*100
                
 
 
