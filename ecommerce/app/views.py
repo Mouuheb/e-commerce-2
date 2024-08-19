@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 
-
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -600,40 +600,42 @@ def card_delete(request, pk):
 
 
 
-
-
 # cardItem Views
 @api_view(['POST'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
+@permission_classes([IsAuthenticated])
 def cardItem_create(request):
-    try:
-        # Extracting product and cart from the request data
-        product_id = request.data.get('product')
-        cart_id = request.data.get('cart')
-        quantity = request.data.get('quantity')
+    # print('uuu')
+    # if request.user.is_authenticated:
+        try:
+            # Extracting product and cart from the request data
+            product_id = request.data.get('product')
+            cart_id = request.data.get('cart')
+            quantity = request.data.get('quantity')
 
-        cart_item = CartItem.objects.filter(product=product_id, cart=cart_id).first()
+            cart_item = CartItem.objects.filter(product=product_id, cart=cart_id).first()
 
-        if cart_item:
-            # If the item exists, update the quantity
-            cart_item.quantity += int(quantity)
-            cart_item.save()
-            serializer = CartItemSerializer(cart_item)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            # If the item doesn't exist, create a new one
-            serializer = CartItemSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Product.DoesNotExist:
-        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
-    except Cart.DoesNotExist:
-        return Response({"error": "Cart not found"}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            if cart_item:
+                # If the item exists, update the quantity
+                cart_item.quantity += int(quantity)
+                cart_item.save()
+                serializer = CartItemSerializer(cart_item)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # If the item doesn't exist, create a new one
+                serializer = CartItemSerializer(data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Cart.DoesNotExist:
+            return Response({"error": "Cart not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    # else:
+        # print('uuu')
+        
 # def cardItem_create(request):
 #     if request.method == 'POST':
 #         try:
