@@ -8,7 +8,9 @@ from .serializers import ProductSerializer, OrderSerializer, CategorySerializer,
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
@@ -602,9 +604,10 @@ def card_delete(request, pk):
 
 # cardItem Views
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
 def cardItem_create(request):
-    # print('uuu')
+        print('uuu')
     # if request.user.is_authenticated:
         try:
             # Extracting product and cart from the request data
@@ -635,7 +638,7 @@ def cardItem_create(request):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     # else:
         # print('uuu')
-        
+
 # def cardItem_create(request):
 #     if request.method == 'POST':
 #         try:
