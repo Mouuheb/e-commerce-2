@@ -36,18 +36,7 @@ def create_checkout_session(request):
         order = Order.objects.all().last()
         total_amoun = order.total_price
         total_amount=int(total_amoun)*100
-               
-
-
-
-
-
-        #total_amount = 25500  # Get the total amount from the request or set it as needed
-
-        # Create new Checkout Session for the total amount
         checkout_session = stripe.checkout.Session.create(
-            # success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-            # cancel_url=domain_url + 'cancelled/',
             success_url='http://localhost:5173/sec?session_id={CHECKOUT_SESSION_ID}',
             cancel_url='http://localhost:5173/fail',
             payment_method_types=['card'],
@@ -69,7 +58,6 @@ def create_checkout_session(request):
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['POST'])
 def stripe_webhook(request):
@@ -139,7 +127,6 @@ def stripe_webhook(request):
 
 # Product Views
 @api_view(['POST'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def product_create(request):
     if request.method == 'POST':
         serializer = ProductSerializer(data=request.data)
@@ -148,92 +135,6 @@ def product_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# @api_view(['GET'])
-# def product_list(request):
-#     products = Product.objects.all()
-
-
-#     # Apply filters
-#     min_price = request.query_params.get('min')
-#     max_price = request.query_params.get('max')
-#     in_stock = request.query_params.get('in_stock')
-#     category = request.query_params.get('category')
-#     is_best = request.query_params.get('is_best')
-
-#     fea = request.query_params.get('featured')
-#     lat = request.query_params.get('latest')
-
-#     if category is not None:
-#         products = products.filter(category==category)
-#     if min_price is not None:
-#         products = products.filter(price__gte=min_price)
-#     if max_price is not None:
-#         products = products.filter(price__lte=max_price)
-#     if in_stock is not None:
-#         in_stock = in_stock.lower() in ['true', '1', 'yes']
-#         products = products.filter(stock_status=in_stock)
-#     if is_best is not None:
-        
-#         if is_best == 'true':
-#             products = products.filter(best=True)
-
-#     if lat is not None:
-#         if lat == 'true':
-#              products = products.order_by('-id')[:4]
-    
-#     if fea is not None:
-#         # products = []
-#         if fea == 'true':
-#             products = products.filter(featured=True)
-
-
-#     serializer = ProductSerializer(products, many=True)
-#     return Response(serializer.data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @api_view(['GET'])
 def product_list(request):
     products = Product.objects.all()
@@ -285,21 +186,7 @@ def product_list(request):
     return Response(serializer.data)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def product_update(request, pk):
     try:
         product = Product.objects.get(pk=pk)
@@ -324,7 +211,6 @@ def product_detail(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def product_delete(request, pk):
     try:
         product = Product.objects.get(pk=pk)
@@ -359,7 +245,6 @@ def catigory_create(request):
     
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def catigory_delete(request, pk):
     try:
         catigory = Category.objects.get(pk=pk)
@@ -391,7 +276,6 @@ def order_list(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def order_update(request, pk):
     try:
         order = Order.objects.get(pk=pk)
@@ -416,7 +300,6 @@ def order_detail(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def order_delete(request, pk):
     try:
         order = Order.objects.get(pk=pk)
@@ -448,7 +331,6 @@ def comment_list(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def comment_update(request, pk):
     try:
         comment = Comment.objects.get(pk=pk)
@@ -473,7 +355,6 @@ def comment_detail(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def comment_delete(request, pk):
     try:
         comment = Comment.objects.get(pk=pk)
@@ -488,7 +369,6 @@ def comment_delete(request, pk):
 
 #orderItem
 @api_view(['POST'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def orderItem_create(request):
     if request.method == 'POST':
         serializer = OrderItemSerializer(data=request.data)
@@ -504,7 +384,6 @@ def orderItem_list(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def orderItem_update(request, pk):
     try:
         orderItem = OrderItem.objects.get(pk=pk)
@@ -529,7 +408,6 @@ def orderItem_detail(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def orderItem_delete(request, pk):
     try:
         orderItem = OrderItem.objects.get(pk=pk)
@@ -546,7 +424,6 @@ def orderItem_delete(request, pk):
 
 # card Views
 @api_view(['POST'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def card_create(request):
     if request.method == 'POST':
         serializer = CardSerializer(data=request.data)
@@ -562,7 +439,6 @@ def card_list(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def card_update(request, pk):
     try:
         card = Cart.objects.get(pk=pk)
@@ -587,7 +463,6 @@ def card_detail(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def card_delete(request, pk):
     try:
         cart = Cart.objects.get(pk=pk)
@@ -600,36 +475,30 @@ def card_delete(request, pk):
 
 
 
-
-
 # cardItem Views
 @api_view(['POST'])
-# @authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticated])
 def cardItem_create(request):
-        print('uuu')
-    # if request.user.is_authenticated:
         try:
-            # Extracting product and cart from the request data
-            product_id = request.data.get('product')
-            cart_id = request.data.get('cart')
-            quantity = request.data.get('quantity')
+                product_id = request.data.get('product')
+                cart_id = request.data.get('cart')
+                quantity = request.data.get('quantity')
 
-            cart_item = CartItem.objects.filter(product=product_id, cart=cart_id).first()
+                cart_item = CartItem.objects.filter(product=product_id, cart=cart_id).first()
 
-            if cart_item:
-                # If the item exists, update the quantity
-                cart_item.quantity += int(quantity)
-                cart_item.save()
-                serializer = CartItemSerializer(cart_item)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                # If the item doesn't exist, create a new one
-                serializer = CartItemSerializer(data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                if cart_item:
+                    # If the item exists, update the quantity
+                    cart_item.quantity += int(quantity)
+                    cart_item.save()
+                    serializer = CartItemSerializer(cart_item)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    # If the item doesn't exist, create a new one
+                    serializer = CartItemSerializer(data=request.data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
         except Product.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
         except Cart.DoesNotExist:
@@ -638,28 +507,6 @@ def cardItem_create(request):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     # else:
         # print('uuu')
-
-# def cardItem_create(request):
-#     if request.method == 'POST':
-#         try:
-#             cardItem = CartItem.objects.get(product=request.product,cart=request.cart)
-#             if cardItem != None and cardItem !=[]:
-#                 pk=cardItem.id
-#                 request={
-#                     "id":pk,
-#                     "card":cardItem.cart,
-#                     "product":cardItem.product,
-#                     "quantity":(cardItem.quantity+request.quantity)
-#                 }
-#                 cardItem_update(request, pk)
-#                 pass
-#         except CartItem.DoesNotExist:
-#             pass
-#         serializer = CartItemSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
 def cardItem_list(request):
@@ -679,7 +526,6 @@ def cardItem_list(request):
     return Response(serializer.data)
 
 @api_view(['PUT'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def cardItem_update(request, pk):
     try:
         cardItem = CartItem.objects.get(pk=pk)
@@ -704,7 +550,6 @@ def cardItem_detail(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def cardItem_delete(request, pk):
     try:
         cardItem = CartItem.objects.get(pk=pk)

@@ -50,27 +50,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-# class UserAccount(AbstractBaseUser, PermissionsMixin):
-#     email = models.EmailField(max_length=255, unique=True)
-#     first_name = models.CharField(max_length=255)
-#     last_name = models.CharField(max_length=255)
-#     is_active = models.BooleanField(default=True)
-#     is_staff = models.BooleanField(default=False)
-#     tel = models.PositiveIntegerField(null=True)
-#     objects = UserAccountManager()
-
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ['first_name', 'last_name']
-
-#     def get_full_name(self):
-#         return self.first_name
-
-#     def get_short_name(self):
-#         return self.first_name
-    
-#     def __str__(self):
-#         return self.email
-
 
 
 
@@ -127,7 +106,7 @@ class Product(models.Model):
 # Comment Model
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     comment = models.TextField()
     #rating = models.IntegerField()  # 1-5 rating
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1 to 5 rating
@@ -141,7 +120,7 @@ class Comment(models.Model):
 
 # Order Model
 class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     # products = models.ManyToManyField(Product, through='OrderItem')
     address = models.CharField(max_length=255)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -164,7 +143,7 @@ class OrderItem(models.Model):
 
 # WishList Model
 class WishList(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     products = models.ManyToManyField(Product, related_name='wishlists')
 
     def __str__(self):
@@ -172,7 +151,7 @@ class WishList(models.Model):
 
 # Cart Model
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     # products = models.ManyToManyField(Product, through='CartItem')
 
     def __str__(self):
@@ -183,7 +162,7 @@ class Cart(models.Model):
 
 # CartItem Model to link Product and Cart
 class CartItem(models.Model):
-    cart = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    cart = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
@@ -194,7 +173,7 @@ class CartItem(models.Model):
         return f'{self.quantity} of {self.product.name} in cart {self.cart.id}'
 
 class WishItem(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
