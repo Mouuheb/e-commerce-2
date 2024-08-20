@@ -324,6 +324,38 @@ def comment_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+# @api_view(['POST'])
+# def comment_create(request):
+#     if request.method == 'POST':
+        
+        
+        
+#         try:
+#             rating_ = request.data.get('rating')
+#             comment_ = request.data.get('comment')
+#             usera = request.data.get('user')
+#             product_ = request.data.get('product')
+#             comment_item = Comment.objects.filter(product=product_,user=usera)
+#             if comment_item:
+#                 comment_item.rating=rating_
+#                 comment_item.comment=comment_
+#                 comment_item.save()
+#                 serializer = CommentSerializer(comment_item)
+#                 return Response(serializer.data, status=status.HTTP_200_OK)
+#             else:
+#                 serializer = CommentSerializer(data=request.data)
+#                 if serializer.is_valid():
+#                     serializer.save()
+#                     return Response(serializer.data, status=status.HTTP_201_CREATED)
+#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#         except Product.DoesNotExist:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
 @api_view(['GET'])
 def comment_list(request):
     comment = Comment.objects.all()
@@ -505,8 +537,6 @@ def cardItem_create(request):
             return Response({"error": "Cart not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    # else:
-        # print('uuu')
     
 @api_view(['GET'])
 def cardItem_list(request):

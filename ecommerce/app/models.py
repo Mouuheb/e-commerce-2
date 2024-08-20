@@ -113,7 +113,7 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return f'Comment by {self.user.username} on {self.product.name}'
+        return f'Comment by {self.user.email} on {self.product.name}'
     
     class Meta:
         unique_together = ['product', 'user']  # Ensure a user can only comment once per product
