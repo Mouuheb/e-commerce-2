@@ -64,5 +64,8 @@ urlpatterns = [
     path('webhook/', views.stripe_webhook), # new
 
 
+    path('getProductFromOrder/', views.getProductFromOrder, name='getProductFromOrder'),
+
+
 
 ]

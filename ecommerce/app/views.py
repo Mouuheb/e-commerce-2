@@ -693,3 +693,80 @@ def wishlist_remove(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .models import Order, OrderItem, Product
+from .serializers import ProductSerializer
+
+@api_view(['GET'])
+def getProductFromOrder(request):
+    use_r = request.query_params.get('user')
+    if use_r is not None:
+        # Filter the orders by the user
+        print(use_r)
+        orde_r = Order.objects.filter(user=use_r).first()
+        
+        if orde_r is None:
+            return Response({"detail": "Order not found for the user."}, status=404)
+        
+        # Get all order items related to the order
+        orderItems = OrderItem.objects.filter(order=orde_r)
+        
+        # Get all products related to these order items
+        products = Product.objects.filter(id__in=orderItems.values_list('product_id', flat=True))
+        
+        # Serialize the products
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+    return Response({"detail": "User not provided."}, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @api_view(['GET'])
+# def getProductFromOrder(request):
+#     orders = Order.objects.all()
+#     products = Product.objects.all()
+#     orderItems = OrderItem.objects.all()
+#     use_r = request.query_params.get('user')
+#     if use_r is not None:
+#         orde_r = orders.filter(user=use_r).first()
+#         id_order=orde_r.id
+#         orderItem = orderItems.filter(order=id_order)
+#         order_product=orderItem.product
+#         product = products.filter(id=order_product)
+
+#         serializer = ProductSerializer(product, many=True)
+#         return Response(serializer.data)
+    

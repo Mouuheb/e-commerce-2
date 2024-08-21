@@ -130,7 +130,7 @@ class Order(models.Model):
     # orderItems = models.ManyToManyField(OrderItem)
 
     def __str__(self):
-        return f'Order {self.id} by {self.user.username}'
+        return f'Order {self.id} by {self.user.email}'
 
 # OrderItem Model to link Product and Order
 class OrderItem(models.Model):
@@ -147,7 +147,7 @@ class WishList(models.Model):
     products = models.ManyToManyField(Product, related_name='wishlists')
 
     def __str__(self):
-        return f'Wishlist of {self.user.username}'
+        return f'Wishlist of {self.user.email}'
 
 # Cart Model
 class Cart(models.Model):
@@ -155,7 +155,7 @@ class Cart(models.Model):
     # products = models.ManyToManyField(Product, through='CartItem')
 
     def __str__(self):
-        return f'Cart of {self.user.username}'
+        return f'Cart of {self.user.email}'
     
     class Meta:
         unique_together = ['user']
@@ -177,5 +177,5 @@ class WishItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user.id} hope {self.product.name}'
+        return f'{self.user.email} hope {self.product.name}'
 
