@@ -621,11 +621,56 @@ def wishItem_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+# @api_view(['GET'])
+# def wishItem_list(request):
+#     use_r = request.query_params.get('user')
+#     print(use_r)
+#     orde_r = Order.objects.filter(user=use_r).first()
+#     if orde_r is None:
+#         wishItem = WishItem.objects.all()
+#         serializer = WishItemSerializer(wishItem, many=True)
+#     else:
+#         wishItem = WishItem.objects.filter(user=use_r)
+
+#         #  # Get the list of product IDs from the wishlist items
+#         product_ids = wishItem.values_list('product_id', flat=True)
+        
+#         # # Retrieve the products associated with those IDs
+#         product = Product.objects.filter(id__in=product_ids)
+#         # wish=wishItem.id
+#         # product =Product.objects.filter(id=wish)
+#         serializer = ProductSerializer(product, many=True)
+#         print(product)
+#     return Response(serializer.data)
+
 @api_view(['GET'])
 def wishItem_list(request):
-    wishItem = WishItem.objects.all()
-    serializer = WishItemSerializer(wishItem, many=True)
+    use_r = request.query_params.get('user')
+    print(use_r)
+    
+    # Check if the user is provided
+    if use_r is None:
+        return Response({"error": "User ID not provided"}, status=400)
+    
+    # Filter wishlist items by user
+    wish_items = WishItem.objects.filter(user=use_r)
+    
+    # If no wish items found, return empty list
+    if not wish_items.exists():
+        return Response({"message": "No wishlist items found for this user"}, status=404)
+    
+    # Get the list of product IDs from the wishlist items
+    product_ids = wish_items.values_list('product_id', flat=True)
+    
+    # Retrieve the products associated with those IDs
+    products = Product.objects.filter(id__in=product_ids)
+    
+    # Serialize the products
+    # products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    
     return Response(serializer.data)
+
 
 @api_view(['PUT'])
 # @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
@@ -652,17 +697,61 @@ def wishItem_detail(request, pk):
     serializer = WishItemSerializer(wishItem)
     return Response(serializer.data)
 
+# @api_view(['DELETE'])
+# def wishItem_delete(request, pk):
+#     use_r = request.query_params.get('user')
+#     if use_r is None:
+#         try:
+#             wishItem = WishItem.objects.get(id=pk)
+#         except WishItem.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+
+#         if request.method == 'DELETE':
+#             wishItem.delete()
+#             return Response(status=status.HTTP_204_NO_CONTENT)
+#     else:
+        
+#         try:
+#             wishItem = WishItem.objects.filter(user=use_r and product=pk)
+#         except WishItem.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+
+#         if request.method == 'DELETE':
+#             wishItem.delete()
+#             return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
+
+
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticatedOrReadOnly, IsManager])
 def wishItem_delete(request, pk):
+    use_r = request.query_params.get('user')
+
     try:
-        wishItem = WishItem.objects.get(pk=pk)
+        if use_r is None:
+            # If no user is specified, delete the WishItem by ID
+            wishItem = WishItem.objects.get(id=pk)
+        else:
+            # If a user is specified, delete WishItem(s) by user and product ID
+            wishItem = WishItem.objects.get(user=use_r, product=pk)
+            if not wishItem.exists():
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
     except WishItem.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'DELETE':
+        # Delete the wish item(s)
         wishItem.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
 
 
 
