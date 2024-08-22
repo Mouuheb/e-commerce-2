@@ -271,7 +271,11 @@ def order_create(request):
 
 @api_view(['GET'])
 def order_list(request):
-    order = Order.objects.all()
+    use_r = request.query_params.get('user')
+    if use_r is not None:
+        order =  Order.objects.filter(user=use_r)
+    else:
+        order = Order.objects.all()
     serializer = OrderSerializer(order, many=True)
     return Response(serializer.data)
 
@@ -411,7 +415,11 @@ def orderItem_create(request):
     
 @api_view(['GET'])
 def orderItem_list(request):
-    orderItem = OrderItem.objects.all()
+    ord = request.query_params.get('ord')
+    if ord is not None:
+        orderItem =  OrderItem.objects.filter(order=ord)
+    else:
+        orderItem = OrderItem.objects.all()
     serializer = OrderItemSerializer(orderItem, many=True)
     return Response(serializer.data)
 
@@ -695,27 +703,6 @@ def wishlist_remove(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import Order, OrderItem, Product
-from .serializers import ProductSerializer
 
 @api_view(['GET'])
 def getProductFromOrder(request):

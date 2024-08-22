@@ -10,31 +10,6 @@ class UserCreateSerializer(UserCreateSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name', 'password')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -67,7 +42,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'address', 'total_price', 'tel', 'email', 'date']
+        fields = ['id', 'user', 'address', 'total_price', 'tel', 'email', 'date', 'status']
 
 class WishListSerializer(serializers.ModelSerializer):
     class Meta:
