@@ -733,12 +733,13 @@ def wishItem_delete(request, pk):
     try:
         if use_r is None:
             # If no user is specified, delete the WishItem by ID
-            wishItem = WishItem.objects.get(id=pk)
+            # wishItem = WishItem.objects.get(id=pk)
+            return Response(status=status.HTTP_404_NOT_FOUND)
         else:
             # If a user is specified, delete WishItem(s) by user and product ID
             wishItem = WishItem.objects.get(user=use_r, product=pk)
-            if not wishItem.exists():
-                return Response(status=status.HTTP_404_NOT_FOUND)
+            # if not wishItem.exists():
+                
 
     except WishItem.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

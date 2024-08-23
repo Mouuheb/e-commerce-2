@@ -164,13 +164,20 @@ EMAIL_HOST_USER='mouhebhatiwch101@gmail.com'
 EMAIL_HOST_PASSWORD='vmbkinbyqqjffgyo'
 EMAIL_USE_TLS=True
 
+SITE_URL = 'http://localhost:5173'
 
 DJOSER = {
+    'SITE_URL': 'http://localhost:5173',
+    'ACTIVATION_URL': '/act/{uid}/{token}/',
+    'PASSWORD_RESET_CONFIRM_URL': 'act2/{uid}/{token}',
+    
+
+
     'LOGIN_FIELD':'email',
     'USERNAME_CHANGED_EMAIL_CONFIRMATION':True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
     'SEND_CONFIRMATION_EMAIL':True,
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    # 'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
