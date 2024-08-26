@@ -91,7 +91,6 @@ class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, to_field='email')
     comment = models.TextField()
-    #rating = models.IntegerField()  # 1-5 rating
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1 to 5 rating
 
 
