@@ -154,7 +154,7 @@ def product_list(request):
     perpage = request.query_params.get('perpage', default=2)
     page = request.query_params.get('page', default=1)
 
-    # size = request.query_params.get('size')
+    search = request.query_params.get('search')
 
 
     if color is not None:
@@ -187,6 +187,11 @@ def product_list(request):
     if fea is not None:
         if fea == 'true':
             products = products.filter(featured=True)
+
+    if search:
+        products = products.filter(name__icontains= search)
+
+
 
     paginator = Paginator(products,per_page=perpage)
     try:
