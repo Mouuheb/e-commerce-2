@@ -18,6 +18,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import stripe
+from django.core.paginator import Paginator,EmptyPage
 
 
 
@@ -150,6 +151,11 @@ def product_list(request):
     color = request.query_params.get('color')
     size = request.query_params.get('size')
 
+    perpage = request.query_params.get('perpage', default=2)
+    page = request.query_params.get('page', default=1)
+
+    # size = request.query_params.get('size')
+
 
     if color is not None:
         products = products.filter(available_colors__icontains= color)
@@ -181,6 +187,13 @@ def product_list(request):
     if fea is not None:
         if fea == 'true':
             products = products.filter(featured=True)
+
+    paginator = Paginator(products,per_page=perpage)
+    try:
+        products = paginator.page(number=page)
+    except EmptyPage:
+        products=[]
+
 
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
