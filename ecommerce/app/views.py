@@ -188,7 +188,7 @@ def product_list(request):
         if fea == 'true':
             products = products.filter(featured=True)
 
-    if search:
+    if search is not None:
         products = products.filter(name__icontains= search)
 
 
